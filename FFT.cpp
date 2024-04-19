@@ -191,7 +191,7 @@ void FFT::parallel_inverse_fft_radix2(std::vector<FFT::complex>& vec)
 
 	// conjugate the complex values of original signal
 	for (int i = 0; i < thread_count; i++)
-		thread_pool.push_back(std::thread(FFT::_conjugate_signal_thread_function, std::ref(vec), i, computation_size_per_thread));
+		thread_pool.push_back(std::thread(FFT::_conjugate_signal_thread_function, std::ref(vec), i * computation_size_per_thread, computation_size_per_thread));
 
 	for (int thread_index = 0; thread_index < thread_pool.size(); thread_index++)
 		thread_pool[thread_index].join();
@@ -202,7 +202,7 @@ void FFT::parallel_inverse_fft_radix2(std::vector<FFT::complex>& vec)
 	
 	// conjugate it again
 	for (int i = 0; i < thread_count; i++)
-		thread_pool.push_back(std::thread(FFT::_conjugate_signal_thread_function, std::ref(vec), i, computation_size_per_thread));
+		thread_pool.push_back(std::thread(FFT::_conjugate_signal_thread_function, std::ref(vec), i * computation_size_per_thread, computation_size_per_thread));
 
 	for (int thread_index = 0; thread_index < thread_pool.size(); thread_index++)
 		thread_pool[thread_index].join();
@@ -210,7 +210,7 @@ void FFT::parallel_inverse_fft_radix2(std::vector<FFT::complex>& vec)
 
 	// normalize by dividing the signal to sample count
 	for (int i = 0; i < thread_count; i++)
-		thread_pool.push_back(std::thread(FFT::_divide_signal_thread_function, std::ref(vec), i, vec.size(), computation_size_per_thread));
+		thread_pool.push_back(std::thread(FFT::_divide_signal_thread_function, std::ref(vec), i * computation_size_per_thread, vec.size(), computation_size_per_thread));
 
 	for (int thread_index = 0; thread_index < thread_pool.size(); thread_index++)
 		thread_pool[thread_index].join();
@@ -238,7 +238,7 @@ void FFT::_parallel_fft_reverse_bit_order(std::vector<FFT::complex>& vec)
 	int computation_size_per_thread = (int)std::ceil((float)size / thread_count);
 
 	for (int i = 0; i < thread_count; i++) {
-		thread_pool.push_back(std::thread(FFT::_parallel_fft_reverse_bit_order_thread_function, std::ref(vec), i, log2_size, computation_size_per_thread));
+		thread_pool.push_back(std::thread(FFT::_parallel_fft_reverse_bit_order_thread_function, std::ref(vec), i * computation_size_per_thread, log2_size, computation_size_per_thread));
 	}
 
 	for (int thread_index = 0; thread_index < thread_pool.size(); thread_index++)
@@ -274,10 +274,10 @@ void FFT::_parallel_fft_single_step(const std::vector<FFT::complex>& read_vector
 
 	std::vector<std::thread> thread_pool;
 	int thread_count = PARALLEL_FFT_THREAD_COUNT;
-	int computation_size_per_thread = (int)std::ceil((float)n / thread_count);
+	int computation_size_per_thread = (int)std::ceil((double)n / thread_count);
 
-	for (int i = 0; i < n; i += computation_size_per_thread) {
-		thread_pool.push_back(std::thread(FFT::_parallel_fft_single_step_thread_function, std::ref(read_vector), std::ref(write_vector), std::ref(exp_table), i, size, computation_size_per_thread));
+	for (int i = 0; i < thread_count; i++) {
+		thread_pool.push_back(std::thread(FFT::_parallel_fft_single_step_thread_function, std::ref(read_vector), std::ref(write_vector), std::ref(exp_table), i * computation_size_per_thread, size, computation_size_per_thread));
 	}
 
 	for (int thread_index = 0; thread_index < thread_pool.size(); thread_index++) {

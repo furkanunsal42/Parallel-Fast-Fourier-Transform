@@ -7,7 +7,7 @@
 namespace FFT {
 
 	const float PI = 3.14154965f;
-	const int PARALLEL_FFT_THREAD_COUNT = 16;
+	const int PARALLEL_FFT_THREAD_COUNT = 1;
 
 	// complex numbers
 	struct complex {
