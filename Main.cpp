@@ -4,7 +4,7 @@
 #include "FFT.h"
 
 int main() {
-	std::vector<FFT::complex> signal = FFT::generate_cos_signal(1 << 24, 2, 4, FFT::PI / 2);
+	std::vector<FFT::complex> signal = FFT::generate_cos_signal(1 << 10, 2, 4, FFT::PI / 2);
 	std::vector<FFT::complex> signal_copy = signal;
 
 	//std::cout << "original: " << std::endl;
@@ -35,7 +35,7 @@ int main() {
 
 
 	// compute maximum error between original signal and inverse_fourier(fourier(signal))
-	float max_error = 1 << 16;
+	double max_error = -1 << 16;
 	for (int i = 0; i < signal.size(); i++) {
 		max_error = std::max(std::abs(signal[i].r - signal_copy[i].r), max_error);
 	}

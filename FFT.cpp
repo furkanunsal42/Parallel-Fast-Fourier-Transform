@@ -8,7 +8,7 @@
 #include <functional>
 #include <thread>
 
-float FFT::magnitude(complex a)
+double FFT::magnitude(complex a)
 {
 	return (a.r * a.r + a.i * a.i);
 }
@@ -17,11 +17,11 @@ FFT::complex FFT::add(complex a, complex b) {
 	return complex(a.r + b.r, a.i + b.i);
 }
 
-FFT::complex FFT::add(complex a, float b) {
+FFT::complex FFT::add(complex a, double b) {
 	return complex(a.r + b, a.i);
 }
 
-FFT::complex FFT::add(float a, complex b) {
+FFT::complex FFT::add(double a, complex b) {
 	return complex(a + b.r, b.i);
 }
 
@@ -29,15 +29,15 @@ FFT::complex FFT::mult(complex a, complex b) {
 	return complex(a.r * b.r - a.i * b.i, a.r * b.i + a.i * b.r);
 }
 
-FFT::complex FFT::mult(complex a, float b) {
+FFT::complex FFT::mult(complex a, double b) {
 	return complex(a.r * b, a.i * b);
 }
 
-FFT::complex FFT::mult(float a, complex b) {
+FFT::complex FFT::mult(double a, complex b) {
 	return complex(b.r * a, b.i * a);
 }
 
-FFT::complex FFT::polar(float magnitude, float phase) {
+FFT::complex FFT::polar(double magnitude, double phase) {
 	return FFT::complex(std::cos(phase) * magnitude, std::sin(phase) * magnitude);
 }
 
@@ -52,11 +52,11 @@ std::vector<FFT::complex> FFT::read_signal_from_file(const std::string& filepath
 	return signal;
 }
 
-std::vector<FFT::complex> FFT::generate_cos_signal(int size, float amplitude, float frequency, float phase)
+std::vector<FFT::complex> FFT::generate_cos_signal(int size, double amplitude, double frequency, double phase)
 {
 	std::vector<FFT::complex> signal(size);
 	for (int i = 0; i < size; i++) {
-		signal[i].r = std::cos((float)i / size * frequency * FFT::PI * 2 + phase) * amplitude;
+		signal[i].r = std::cos((double)i / size * frequency * FFT::PI * 2 + phase) * amplitude;
 		signal[i].i = 0;
 	}
 	return signal;
@@ -175,7 +175,7 @@ void FFT::_conjugate_signal_thread_function(std::vector<FFT::complex>& vector, i
 	}
 }
 
-void FFT::_divide_signal_thread_function(std::vector<FFT::complex>& vector, int i, float divisor, int computation_size_per_thread) {
+void FFT::_divide_signal_thread_function(std::vector<FFT::complex>& vector, int i, double divisor, int computation_size_per_thread) {
 	for (int computation_index = 0; computation_index < computation_size_per_thread; computation_index++) {
 		if (i > vector.size()) return;
 		vector[i] = FFT::complex(vector[i].r / divisor, vector[i].i / divisor);
@@ -187,7 +187,7 @@ void FFT::parallel_inverse_fft_radix2(std::vector<FFT::complex>& vec)
 {
 	std::vector<std::thread> thread_pool;
 	int thread_count = PARALLEL_FFT_THREAD_COUNT;
-	int computation_size_per_thread = (int)std::ceil((float)vec.size() / thread_count);
+	int computation_size_per_thread = (int)std::ceil((double)vec.size() / thread_count);
 
 	// conjugate the complex values of original signal
 	for (int i = 0; i < thread_count; i++)
@@ -235,7 +235,7 @@ void FFT::_parallel_fft_reverse_bit_order(std::vector<FFT::complex>& vec)
 	std::vector<std::thread> thread_pool;
 
 	int thread_count = PARALLEL_FFT_THREAD_COUNT;
-	int computation_size_per_thread = (int)std::ceil((float)size / thread_count);
+	int computation_size_per_thread = (int)std::ceil((double)size / thread_count);
 
 	for (int i = 0; i < thread_count; i++) {
 		thread_pool.push_back(std::thread(FFT::_parallel_fft_reverse_bit_order_thread_function, std::ref(vec), i * computation_size_per_thread, log2_size, computation_size_per_thread));

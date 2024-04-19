@@ -6,32 +6,32 @@
 // Fast Fourier Transform
 namespace FFT {
 
-	const float PI = 3.14154965f;
+	const double PI = 3.14154965f;
 	const int PARALLEL_FFT_THREAD_COUNT = 1;
 
 	// complex numbers
 	struct complex {
-		complex(float r = 0, float i = 0) :
+		complex(double r = 0, double i = 0) :
 			r(r), i(i) {}
-		float r;
-		float i;
+		double r;
+		double i;
 	};
 
-	float magnitude(complex a);
+	double magnitude(complex a);
 
 	complex add(complex a, complex b);
-	complex add(complex a, float b);
-	complex add(float a, complex b);
+	complex add(complex a, double b);
+	complex add(double a, complex b);
 
 	complex mult(complex a, complex b);
-	complex mult(complex a, float b);
-	complex mult(float a, complex b);
+	complex mult(complex a, double b);
+	complex mult(double a, complex b);
 
-	complex polar(float magnitude, float phase);
+	complex polar(double magnitude, double phase);
 
 	// test signal generation
 	std::vector<complex> read_signal_from_file(const std::string& filepath);
-	std::vector<FFT::complex> generate_cos_signal(int size, float amplitude, float frequency, float phase);
+	std::vector<FFT::complex> generate_cos_signal(int size, double amplitude, double frequency, double phase);
 
 	// fft
 	void fft_radix2(std::vector<complex>& vec);
@@ -53,7 +53,7 @@ namespace FFT {
 	void _parallel_fft_reverse_bit_order_thread_function(std::vector<FFT::complex>& vec, int index, int log2_size, int computation_size_per_thread);
 	void _parallel_fft_single_step_thread_function(const std::vector<FFT::complex>& read_vector, std::vector<FFT::complex>& write_vector, const std::vector<FFT::complex>& exp_table, int i, int size, int computation_size_per_thread);
 	void _conjugate_signal_thread_function(std::vector<FFT::complex>& vector, int i, int computation_size_per_thread);
-	void _divide_signal_thread_function(std::vector<FFT::complex>& vector, int i, float divisor, int computation_size_per_thread);
+	void _divide_signal_thread_function(std::vector<FFT::complex>& vector, int i, double divisor, int computation_size_per_thread);
 }
 
 std::ostream& operator<<(std::ostream& stream, const FFT::complex& complex);
