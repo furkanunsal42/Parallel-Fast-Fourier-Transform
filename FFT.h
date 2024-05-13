@@ -7,7 +7,7 @@
 namespace FFT {
 
 	const double PI = 3.14154965f;
-	const int PARALLEL_FFT_THREAD_COUNT = 1;
+	const int PARALLEL_FFT_THREAD_COUNT = 16;
 
 	// complex numbers
 	struct complex {
@@ -57,3 +57,5 @@ namespace FFT {
 }
 
 std::ostream& operator<<(std::ostream& stream, const FFT::complex& complex);
+
+

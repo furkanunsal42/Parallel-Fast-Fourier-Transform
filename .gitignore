@@ -57,3 +57,9 @@ x64/Release/vc143.pdb
 x64/Debug/ParallelFFT.vcxproj.FileListAbsolute.txt
 x64/Debug/ParallelFFT.pdb
 x64/Debug/OMP_FFT.obj
+*.tlog
+*.log
+*.obj
+*.db
+/x64/Debug
+/x64

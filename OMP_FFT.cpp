@@ -8,6 +8,7 @@
 #include <functional>
 #include <thread>
 
+
 double OMP_FFT::magnitude(complex a)
 {
 	return (a.r * a.r + a.i * a.i);
@@ -134,7 +135,7 @@ void OMP_FFT::parallel_fft_radix2(std::vector<OMP_FFT::complex>& vec) {
 	// organize values into reverse bit ordering
 	auto start = std::chrono::system_clock::now();
 	_parallel_fft_reverse_bit_order(vec);
-	std::cout << "_parallel_fft_reverse_bit_order took " << std::chrono::duration<double>(std::chrono::system_clock::now() - start).count() << " seconds" << std::endl;
+	//std::cout << "_parallel_fft_reverse_bit_order took " << std::chrono::duration<double>(std::chrono::system_clock::now() - start).count() << " seconds" << std::endl;
 
 	// comptue number of steps required by finding log2(size)
 	int size = vec.size();
@@ -160,7 +161,7 @@ void OMP_FFT::parallel_fft_radix2(std::vector<OMP_FFT::complex>& vec) {
 		
 		auto start = std::chrono::system_clock::now();
 		_parallel_fft_single_step(vec_to_read, vec_to_write, exp_table, i);
-		std::cout << "_parallel_fft_single_step took " << std::chrono::duration<double>(std::chrono::system_clock::now() - start).count() << " seconds" << std::endl;
+		//std::cout << "_parallel_fft_single_step took " << std::chrono::duration<double>(std::chrono::system_clock::now() - start).count() << " seconds" << std::endl;
 	}
 
 	// if the last step wrote to vec_copy, copy the final result back to original vector

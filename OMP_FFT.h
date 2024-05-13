@@ -7,7 +7,7 @@
 namespace OMP_FFT {
 
 	const double PI = 3.14154965f;
-	const int PARALLEL_OMP_FFT_THREAD_COUNT = 2;
+	const int PARALLEL_OMP_FFT_THREAD_COUNT = 16;
 
 	// complex numbers
 	struct complex {
